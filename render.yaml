@@ -1,19 +1,21 @@
 services:
-  # 1. Backend: Nexus Sentinel API
+  # 1. Backend Service
   - type: web
     name: nexus-sentinel-api
-    env: python
+    runtime: python
+    region: oregon
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHONPATH
         value: .
       - key: DATAHUB_GMS_URL
-        sync: false # This tells Render to ask you for the value privately
+        sync: false # This triggers a prompt for the URL in the Render UI
 
-  # 2. Frontend: Nexus Sentinel Dashboard
+  # 2. Frontend Service
   - type: web
     name: nexus-sentinel-ui
-    env: static
+    runtime: static
+    region: oregon
     buildCommand: cd nexus-frontend && npm install && npm run build
-    publishPath: ./nexus-frontend/dist
+    staticPublishPath: ./nexus-frontend/dist
