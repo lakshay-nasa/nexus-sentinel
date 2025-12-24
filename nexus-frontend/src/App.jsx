@@ -12,9 +12,14 @@ import {
   PlayCircle,
   Wifi,
   WifiOff,
-  RefreshCcw
+  RefreshCcw,
+  Github
 } from 'lucide-react';
 import axios from 'axios';
+// --- DYNAMIC API CONFIGURATION ---
+// Locally: uses VITE_API_URL from nexus-frontend/.env
+// Production: defaults to the Render backend URL
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://nexus-sentinel-api.onrender.com";
 
 function App() {
   const [ticker, setTicker] = useState('');
@@ -25,10 +30,9 @@ function App() {
   const [isDataHubOnline, setIsDataHubOnline] = useState(null);
 
   // --- SMART STATUS CHECK ---
-  // This pings the local DataHub port to see if the environment is ready
   const checkDataHubStatus = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/health/datahub');
+      const response = await axios.get(`${API_BASE_URL}/health/datahub`);
       setIsDataHubOnline(response.data.online);
     } catch (err) {
       setIsDataHubOnline(false);
@@ -37,7 +41,6 @@ function App() {
 
   useEffect(() => {
     checkDataHubStatus();
-    // Re-check status every 30 seconds
     const interval = setInterval(checkDataHubStatus, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -49,12 +52,11 @@ function App() {
     setShowSetupGuide(false);
 
     try {
-      // Connects to your FastAPI backend
-      const response = await axios.get(`https://nexus-sentinel-api.onrender.com/sync/${ticker}`);
+      // Now we use the dynamic API_BASE_URL for the sync call
+      const response = await axios.get(`${API_BASE_URL}/sync/${ticker}`);
       setResult(response.data);
     } catch (err) {
-      // If backend fails, we proactively help the user
-      setError("Local Connection Refused");
+      setError("Metadata Emission Failed (Check DataHub Connection)");
       setShowSetupGuide(true);
       setResult(null);
       checkDataHubStatus(); 
@@ -113,6 +115,30 @@ function App() {
             </div>
           </div>
         </header>
+
+        {/* --- CLOUD DEMO INFO BANNER --- */}
+        <div className="mb-8 p-6 bg-slate-900/40 border border-slate-800 rounded-3xl backdrop-blur-md">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="flex items-start gap-4">
+              <span className="text-3xl">🧑‍💻</span>
+              <div>
+                <h3 className="text-white font-bold text-lg">Interactive Cloud Demo</h3>
+                <p className="text-slate-400 text-sm mt-1 leading-relaxed">
+                  This dashboard is a <strong>read only preview</strong>. To emit real metadata and see tags in 
+                  your own DataHub, clone the project and run it locally.
+                </p>
+              </div>
+            </div>
+            <a 
+              href="https://github.com/lakshay-nasa/nexus-sentinel" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 bg-white text-slate-900 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-blue-400 hover:text-white transition-all shrink-0 shadow-xl"
+            >
+              <Github size={18} /> Clone & Run Local
+            </a>
+          </div>
+        </div>
 
         {/* --- MAIN GOVERNANCE INTERFACE --- */}
         <main className="bg-slate-900/50 backdrop-blur-xl p-8 rounded-3xl border border-slate-800 shadow-2xl">
@@ -208,22 +234,6 @@ function App() {
                   <div className="font-bold text-sm">2. DataHub Cloud</div>
                   <div className="text-xs text-slate-500 mt-2">Enterprise Metadata SaaS</div>
                 </a>
-              </div>
-
-              {/* --- Cloud Demo Info Banner --- */}
-              <div className="max-w-4xl mx-auto mb-6 px-4">
-                <div className="bg-blue-900/30 border border-blue-500/50 rounded-lg p-4 flex items-start gap-3">
-                  <span className="text-2xl">ℹ️</span>
-                  <div>
-                    <p className="text-blue-200 text-sm font-medium">
-                      <strong>Cloud Demo Note:</strong> This UI is connected to a live Render API. 
-                    </p>
-                    <p className="text-blue-300/80 text-xs mt-1">
-                      To see the <strong>Verified</strong> tags appear in DataHub, please run this project locally. 
-                      Metadata emission requires a connection to a local DataHub GMS on port 8080.
-                    </p>
-                  </div>
-                </div>
               </div>
 
               {/* <div className="bg-slate-950/40 p-6 rounded-2xl border border-slate-800/50 flex flex-col items-center">
