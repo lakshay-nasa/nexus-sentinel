@@ -16,6 +16,5 @@ services:
   - type: web
     name: nexus-sentinel-ui
     runtime: static
-    region: oregon
     buildCommand: cd nexus-frontend && npm install && npm run build
     staticPublishPath: ./nexus-frontend/dist
