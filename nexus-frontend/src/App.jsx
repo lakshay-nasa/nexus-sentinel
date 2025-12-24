@@ -210,6 +210,22 @@ function App() {
                 </a>
               </div>
 
+              {/* --- Cloud Demo Info Banner --- */}
+              <div className="max-w-4xl mx-auto mb-6 px-4">
+                <div className="bg-blue-900/30 border border-blue-500/50 rounded-lg p-4 flex items-start gap-3">
+                  <span className="text-2xl">ℹ️</span>
+                  <div>
+                    <p className="text-blue-200 text-sm font-medium">
+                      <strong>Cloud Demo Note:</strong> This UI is connected to a live Render API. 
+                    </p>
+                    <p className="text-blue-300/80 text-xs mt-1">
+                      To see the <strong>Verified</strong> tags appear in DataHub, please run this project locally. 
+                      Metadata emission requires a connection to a local DataHub GMS on port 8080.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               {/* <div className="bg-slate-950/40 p-6 rounded-2xl border border-slate-800/50 flex flex-col items-center">
                 <p className="text-xs text-slate-500 font-semibold mb-4 uppercase tracking-widest text-center">No environment? Watch the system in action:</p>
                 <a 
