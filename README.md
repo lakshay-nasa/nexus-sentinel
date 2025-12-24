@@ -28,7 +28,10 @@ npm run dev
 ```
 
 ## 📺 Live Demo
--
+- **Dashboard UI:** [https://nexus-sentinel-ui.onrender.com/](https://nexus-sentinel-ui.onrender.com/)
+
+> ⚠️ **Important Deployment Note:** The cloud demo is hosted on Render to showcase the UI and API architecture. However, as we ran **DataHub** typically runs on a private local network, the "Metadata Sync" and "Health Check" features require a local DataHub instance running on port `8080`.
+
 
 ## 🔍 Troubleshooting Ports
 Nexus Sentinel expects the following services to be active:
