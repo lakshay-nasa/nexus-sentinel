@@ -49,8 +49,8 @@ function App() {
     setShowSetupGuide(false);
 
     try {
-      // Connects to your local FastAPI backend
-      const response = await axios.get(`http://127.0.0.1:8000/sync/${ticker}`);
+      // Connects to your FastAPI backend
+      const response = await axios.get(`https://nexus-sentinel-api.onrender.com/sync/${ticker}`);
       setResult(response.data);
     } catch (err) {
       // If backend fails, we proactively help the user
