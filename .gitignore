@@ -1,0 +1,24 @@
+# --- Environment Variables ---
+.env
+.env.local
+
+# --- Python / Backend ---
+__pycache__/
+*.py[cod]
+*$py.class
+.nenv/
+.venv/
+env/
+venv/
+.pytest_cache/
+
+# --- Node / Frontend ---
+node_modules/
+dist/
+dist-ssr/
+*.local
+.eslintcache
+
+# --- System Files ---
+.DS_Store
+Thumbs.db
