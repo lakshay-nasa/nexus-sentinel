@@ -7,12 +7,15 @@ class DataHubSentinel:
     def __init__(self, gms_url="http://localhost:8080"):
         self.emitter = DatahubRestEmitter(gms_url)
 
+    # governance.py
     def emit_trust_metadata(self, data_context: dict):
         urn = data_context["urn"]
         
-        # 1. Emit Custom Properties (The "AI Context")
+        # 1. Properties Aspect (Requires entityType and aspectName)
         props = MetadataChangeProposalWrapper(
+            entityType="dataset", # Required
             entityUrn=urn,
+            aspectName="datasetProperties", # Required
             aspect=models.DatasetPropertiesClass(
                 customProperties={
                     "volatility_index": str(data_context["volatility"]),
@@ -23,10 +26,12 @@ class DataHubSentinel:
             )
         )
 
-        # 2. Emit Tags (The "Governance" part)
+        # 2. Tags Aspect (Requires entityType and aspectName)
         tag_urn = "urn:li:tag:Verified" if data_context["is_trustworthy"] else "urn:li:tag:HighVolatilityRisk"
         tags = MetadataChangeProposalWrapper(
+            entityType="dataset", # Required
             entityUrn=urn,
+            aspectName="globalTags", # Required
             aspect=models.GlobalTagsClass(
                 tags=[models.TagAssociationClass(tag=tag_urn)]
             )
